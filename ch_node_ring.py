@@ -5,10 +5,10 @@ class Ch_Ring():
 
     def __init__(self, nodes):
 
-        self.rf = 3 # Replication Factor: 3
-        self.vrf = 3 # Mapping of number of vnodes to 1 physical node
+        self.rf = 2 # Replication Factor: 2
+        self.vrf = 4 # Mapping of number of vnodes to 1 physical node
         self.node_count = len(nodes) # Number of physical nodes
-        self.vnodes = self.node_count * self.vrf # Number of Virtual Nodes: 12
+        self.vnodes = self.node_count * self.vrf # Number of Virtual Nodes: 16
         self.nodes = nodes # Actual physical nodes
         self.ring_size = self.node_count * 100 # Ring Size
         self.replicas = dict() # replica dictionary
@@ -26,8 +26,9 @@ class Ch_Ring():
                 ring_addr = int(hash_code_hex((str(node.port) + str(i)).encode()), 16) % self.ring_size
                 self.ring.append((ring_addr, node))
 
+        # print(self.ring)
         # Sort the ring virual addresses
-        self.ring.sort()
+        self.ring.sort(key=lambda x: x[0])
 
         print("Ring Configuration: vNode, pNode")
         for a, b in self.ring:
