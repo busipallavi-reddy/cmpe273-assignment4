@@ -25,10 +25,6 @@ class UDPClient():
             print("Error! {}".format(socket.error))
             exit()
 
-def iptoint(ip):
-    ip = socket.inet_aton(ip)
-    return struct.unpack("!L", ip)[0]
-
 def weight(key, node):
     a = 1103515245
     b = 12345
@@ -37,8 +33,7 @@ def weight(key, node):
 def get_hrw_node(key, udp_clients):
     wts = []
     for node in udp_clients:
-        # print(iptoint(str(node.host)))
-        wt = weight(key, iptoint(str(node.host)) * (2 ** 16) + node.port)
+        wt = weight(key, node.port)
         wts.append((node, wt))
     print("Nodes and Weights", [ (n.host, n.port, w) for n, w in wts])
     max_w = wts[0][1]
